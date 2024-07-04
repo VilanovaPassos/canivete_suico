@@ -71,7 +71,7 @@ def realiza_download_video_resolucao(video_link, resolution, save_path, progress
 
     return salvar
 
-def realiza_download_video(video_link, save_path, progress=gr.Progress):
+def realiza_download_video(video_link, save_path, progress=gr.Progress()):
     progress(0.3, desc="Procurando video..")
     yt = YouTube(video_link)
      
@@ -177,5 +177,5 @@ with gr.Blocks(css=css, title="Youtube Downloader", js=js_func) as demo:
         gr.Markdown("CONVERSOR PDF ---> JPEG")
 
 if __name__ == "__main__":
-    os.system('start chrome http://127.0.0.1:80') #abre chrome 
+    os.system('explorer http://127.0.0.1:80') #abre navegador 
     demo.launch(server_port=80, quiet=True, show_api=False)
