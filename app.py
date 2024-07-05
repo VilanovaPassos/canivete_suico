@@ -37,6 +37,17 @@ function refresh() {
 """
 
 
+def normaliza_titulo(title):
+    title = title.replace("|", "")
+    title = title.replace(">", " ")
+    title = title.replace("<", " ")
+    title = title.replace(":", " ")
+    title = title.replace("/", "_")
+    title = title.replace("\\", "_")
+    title = title.replace("?", "")
+    title = title.replace("*", "")
+
+    return title
 
 def realiza_download_video_resolucao(video_link, resolution, save_path, progress=gr.Progress()):
     # ATENÇÃO USANDO ESTE METODO O PROGRAMA IRA DEMORAR SIGNIFICATIVAMENTE MAIS, POIS FARA O DOWNLOAD
@@ -52,8 +63,8 @@ def realiza_download_video_resolucao(video_link, resolution, save_path, progress
 
     progress(0.65, desc="Baixando!!!")
     #titulo do video
-    title = YouTube(video_link).title
-    title = title.replace(" ","_").replace("|","") #remove | e espaços do titulo
+    title = normaliza_titulo(YouTube(video_link).title)
+
     salvar = f"{save_path}\\{title}.mp4"
     print(salvar)
 
@@ -81,8 +92,7 @@ def realiza_download_video(video_link, save_path, progress=gr.Progress()):
     yt = YouTube(video_link)
      
     progress(0.55, desc="Iniciando download!")
-    title = yt.title
-    title = title.replace("|", "") #retira | do titulo do video, pode causar problemas com salvamento
+    title = normaliza_titulo(yt.title) #retira caracteres proibidos do titulo
 
     progress(0.7, desc="Baixando..")
     video = yt.streams.filter().get_highest_resolution().download(save_path, f"{title}.mp4") #faz o download da stream com maior qualidade disponivel com audio
@@ -94,20 +104,17 @@ def realiza_download_video(video_link, save_path, progress=gr.Progress()):
 def realiza_download_audio(video_link, save_path, progress=gr.Progress()):
     #baixar como audio
     progress(0.3, desc="Procurando video..")
-    video_url = YouTube(video_link)
+    yt = YouTube(video_link)
+    title = normaliza_titulo(yt.title)
 
     progress(0.55, desc="Iniciando download!")
-    video = video_url.streams.filter(only_audio = True).first()
+    video = yt.streams.filter(only_audio = True).first()
 
     progress(0.7, desc="Baixando..")
-    out_file = video.download(save_path)
+    out_file = video.download(save_path, f"{title}.mp3")
 
     progress(0.85, desc="Salvando video...")
-    base, ext = os.path.splitext(out_file)
-    new_file = base + '.mp3'
-    os.rename(out_file, new_file)
-
-    return new_file
+    return os.path.abspath(out_file)
 
 def video_downloader(video_link, tipo,resolution, como_salvar, progress=gr.Progress()):
     #verifica se url é valida
