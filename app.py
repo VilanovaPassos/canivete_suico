@@ -1,6 +1,7 @@
 import gradio as gr
 from pytube import YouTube
 import os
+import socket
 import tempfile
 import moviepy.editor as mpe
 
@@ -9,6 +10,8 @@ import moviepy.editor as mpe
 HOLYRICS_VIDEO = "C:\\Holyrics\\Holyrics\\files\\media\\video" 
 HOLYRICS_AUDIO = "C:\\Holyrics\\Holyrics\\files\\media\\audio"
 TEMPORARIO = tempfile.gettempdir()
+#Pega indereço IP
+IP_ADDR = socket.gethostbyname(socket.gethostname())
 
 #CSS
 css = """
@@ -32,6 +35,8 @@ function refresh() {
     }
 }
 """
+
+
 
 def realiza_download_video_resolucao(video_link, resolution, save_path, progress=gr.Progress()):
     # ATENÇÃO USANDO ESTE METODO O PROGRAMA IRA DEMORAR SIGNIFICATIVAMENTE MAIS, POIS FARA O DOWNLOAD
@@ -177,5 +182,5 @@ with gr.Blocks(css=css, title="Youtube Downloader", js=js_func) as demo:
         gr.Markdown("CONVERSOR PDF ---> JPEG")
 
 if __name__ == "__main__":
-    os.system('explorer http://127.0.0.1:80') #abre navegador 
-    demo.launch(server_port=80, quiet=True, show_api=False)
+    os.system(f'explorer http://{IP_ADDR}') #abre navegador 
+    demo.launch(server_name=IP_ADDR, server_port=80, quiet=True)

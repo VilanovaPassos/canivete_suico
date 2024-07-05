@@ -7,4 +7,6 @@ def startProgram():
     info.dwFlags = subprocess.STARTF_USESHOWWINDOW
     info.wShowWindow = SW_HIDE
     subprocess.Popen(os.path.join(os.path.dirname(__file__) or '.','Canivete_0.1.exe'), startupinfo=info)
-startProgram()
+
+if __name__ == "__main__":
+    startProgram()
