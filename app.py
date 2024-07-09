@@ -189,5 +189,5 @@ with gr.Blocks(css=css, title="Youtube Downloader", js=js_func) as demo:
         gr.Markdown("CONVERSOR PDF ---> JPEG")
 
 if __name__ == "__main__":
-    os.system(f'explorer http://{IP_ADDR}') #abre navegador 
-    demo.launch(server_name=IP_ADDR, server_port=80, quiet=True)
+    os.system(f'start http://{IP_ADDR}') #abre navegador 
+    demo.launch(server_name=IP_ADDR, server_port=80, quiet=True, show_api=False)
