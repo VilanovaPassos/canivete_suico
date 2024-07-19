@@ -4,7 +4,11 @@ pause
 cd %~dp0
 
 @echo Copiando Canivete para dentro do Holyrics ...
-xcopy .\Canivete_1.0.exe C:\Holyrics\Holyrics\files
+xcopy .\Canivete.exe C:\Holyrics\Holyrics\files
+xcopy .\ffmpeg.exe C:\Holyrics\Holyrics\files
+xcopy .\ffplay.exe C:\Holyrics\Holyrics\files
+xcopy .\ffpobe.exe C:\Holyrics\Holyrics\files
+xcopy .\yt-dlp.exe C:\Holyrics\Holyrics\files
 
 @echo abrindo porta 80 ...
 netsh advfirewall firewall add rule name="canivete_holyrics" protocol=TCP dir=in localport=80 action=allow

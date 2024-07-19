@@ -3,7 +3,11 @@ pause
 
 @echo.
 @echo Deletando executavel
-del C:\Holyrics\Holyrics\files\Canivete_1.0.exe
+del C:\Holyrics\Holyrics\files\Canivete.exe
+del C:\Holyrics\Holyrics\files\ffmpeg.exe
+del C:\Holyrics\Holyrics\files\ffplay.exe
+del C:\Holyrics\Holyrics\files\ffpobe.exe
+del C:\Holyrics\Holyrics\files\yt-dlp.exe
 
 @echo.
 @echo fechando portas

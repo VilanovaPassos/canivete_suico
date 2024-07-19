@@ -2,7 +2,7 @@
 
 2 - no terminal siga os seguintes passos:
 
-a) In command line: pyi-makespec --additional-hooks-dir="build_deps\\" --collect-data=gradio_client --collect-data=gradio --hidden-import pyarrow.vendored.version --onefile --name Canivete_1.0 app.py
+a) In command line: pyi-makespec --additional-hooks-dir="build_deps\\" --collect-data=gradio_client --collect-data=gradio --hidden-import pyarrow.vendored.version --onefile --i icon.ico --name Canivete app.py
 
 b) Abra o arquivo spec criado com o Notepad. adicione a seguinte linha no fim da sessao Analysis e então salve:
 
@@ -13,6 +13,6 @@ a = Analysis(
     }
 )
 
-c) Back in command line, run this: pyinstaller --clean --noconfirm Canivete_1.0.spec
+c) Back in command line, run this: pyinstaller --clean --noconfirm Canivete.spec
 
 o executavel estara na pasta dist
