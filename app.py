@@ -52,25 +52,35 @@ def video_downloader(video_link, tipo, resolution, como_salvar, progress=gr.Prog
     if video_link.split("//")[0] == "https:" :
 
         #Verifica tipo e encaminha para download de video ou audio 
+        progress(0.3, desc="Procurando video...")
         if tipo != "somente audio":
             #verifica se salvamento sera no holyrics
+            progress(0.65, desc="Iniciando Download...")
             if como_salvar == "sim":
+                progress(0.8, desc="Baixando...")
                 realiza_download_video(video_link, HOLYRICS_VIDEO, resolution)
 
                 gr.Warning("Video Baixado!")
                 return "DOWNLOAD REALIZADO COM SUCESSO!!! VIDEO SALVO NA PASTA DO HOLYRICS!!", gr.DownloadButton(label="salvar", value="base", visible=False)
             else:
+                progress(0.8, desc="Baixando...")
                 realiza_download_video(video_link, TEMPORARIO, resolution, "temp")
 
                 gr.Warning("Video Baixado!")
                 return "DOWNLOAD REALIZADO COM SUCESSO!!! ESCOLHA UMA PASTA PARA SALVARO O ARQUIVO", gr.DownloadButton(label="salvar", value=f"{TEMPORARIO}\\temp.mp4", visible=True)
         else:
+            progress(0.65, desc="Iniciando Download...")
+            
             if como_salvar == "sim":
+                progress(0.8, desc="Baixando...")
                 realiza_download_audio(video_link, HOLYRICS_AUDIO)
+
                 gr.Warning("Video Baixado!")
                 return "DOWNLOAD REALIZADO COM SUCESSO!!! VIDEO SALVO NA PASTA DO HOLYRICS!!", gr.DownloadButton(label="salvar", value="base", visible=False)
             else:
+                progress(0.8, desc="Baixando...")
                 realiza_download_audio(video_link, TEMPORARIO, "temp")
+
                 gr.Warning("Video Baixado!")
                 return "DOWNLOAD REALIZADO COM SUCESSO!!! ESCOLHA UMA PASTA PARA SALVARO O ARQUIVO", gr.DownloadButton(label="salvar", value=f"{TEMPORARIO}\\temp.mp3", visible=True)
     else:
