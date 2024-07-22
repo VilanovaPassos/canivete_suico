@@ -4,13 +4,15 @@ Ferramenta criada para ultilizar jutamente com holyrics, tornando facil o downlo
 
 ## Como Instalar:
 
-tendo o Holyrics instalado no disco C do seu computador isto é C:\Holyrics, abra a pasta dist e execute cofigurar.bat como administrador, isso copiara o programa Canivete_0.1.exec para dentro da pasta do holyrics e criara uma tarefa no agendador de tarefas, fazendo com que o programa inicie automaticamente sempre que o computador for ligado.
+tendo o Holyrics instalado no disco C do seu computador isto é C:\Holyrics, abra a pasta dist e execute cofigurar.bat como administrador, isso copiara o programa Canivete.exe e suas dependecias para dentro da pasta do holyrics e criara uma tarefa no agendador de tarefas, fazendo com que o programa inicie automaticamente sempre que o computador for ligado.
 
 Voce pode usar o programa via navegador digitando seu endereço de IP na barra de URL ou clicando em Abre.bat que iniciara seu navegador padrao já na aplicação.
 
+A desinstalacao pode ser feita executando o arquivo desisntalar.bat como administrador, isso apagara o programa Canivete.exe e suas dependencias da pasta do holyrics e apagara as taefas do agendador de tarefas. Recomendo que seja feita a desisntalacao antes de testar uma nova versao
+
 ## Como usar:
 
-Com a aplicação aberta no navegador, basta colar a URL do video do youtube e clicar em baixar, o video sera baixado na melhor qualidade possivel com audio diretamente na pasta de videos do holirycs. Selecionando a opção "somente audio" o programa baixara somente o audio do video e ira salvar na pasta de audios do holyrics.
+Com a aplicação aberta no navegador, basta colar a URL do video do youtube e clicar em baixar, o video sera baixado em 720p por padrao na pasta de videos do holirycs. Selecionando a opção "somente audio" o programa baixara somente o audio do video e ira salvar na pasta de audios do holyrics.
 
 Com a opção "salvar o arquivo no holyrics" na posição "não", o programa ira gerar um botão "salvar como" onde voce pode escolher onde salvar o arquivo.
 
