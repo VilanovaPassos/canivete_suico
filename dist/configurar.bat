@@ -7,7 +7,7 @@ cd %~dp0
 xcopy .\Canivete.exe C:\Holyrics\Holyrics\files
 xcopy .\ffmpeg.exe C:\Holyrics\Holyrics\files
 xcopy .\ffplay.exe C:\Holyrics\Holyrics\files
-xcopy .\ffpobe.exe C:\Holyrics\Holyrics\files
+xcopy .\ffprobe.exe C:\Holyrics\Holyrics\files
 xcopy .\yt-dlp.exe C:\Holyrics\Holyrics\files
 
 @echo abrindo porta 80 ...
