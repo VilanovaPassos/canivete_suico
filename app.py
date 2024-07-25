@@ -1,5 +1,5 @@
 import gradio as gr
-import pypdfium2 as pdfium
+import fitz
 import os
 import socket
 import tempfile
@@ -91,15 +91,23 @@ def video_downloader(video_link, tipo, resolution, como_salvar, progress=gr.Prog
 # ************************* Conversor PDF ****************************
 
 def converte(pdf, path, file_name):
-     # Load a document
-     pdf = pdfium.PdfDocument(pdf)
-     pdf.get_metadata_dict 
+    #  # Load a document
+    #  pdf = pdfium.PdfDocument(pdf)
+    #  pdf.get_metadata_dict 
 
-     # Loop over pages and render
-     for i in range(len(pdf)):
-         page = pdf[i]
-         image = page.render(scale=4).to_pil()
-         image.save(f"{path}\\{file_name}.jpg")
+    #  # Loop over pages and render
+    #  for i in range(len(pdf)):
+    #      page = pdf[i]
+    #      image = page.render(scale=4).to_pil()
+    #      image.save(f"{path}\\{file_name}.jpg")
+
+    pdffile = pdf
+    doc = fitz.open(pdffile)
+    page = doc.load_page(0)  # number of page
+    pix = page.get_pixmap()
+    output = f"{path}\\{file_name}.png"
+    pix.save(output)
+    doc.close()
 
             
 
@@ -114,7 +122,7 @@ def pdf_converter(file, como_salvar):
         converte(file, TEMPORARIO, file_name)
 
         gr.Warning("Convertido com sucesso")
-        return gr.DownloadButton(label="salvar", value=f"{TEMPORARIO}\\{file_name}.jpg", visible=True)
+        return gr.DownloadButton(label="salvar", value=f"{TEMPORARIO}\\{file_name}.png", visible=True)
     else:
         converte(file, HOLYRICS_IMAGEM, file_name)
 
@@ -122,7 +130,7 @@ def pdf_converter(file, como_salvar):
 
 # ************************** PAGINAS *******************************
 
-with gr.Blocks(css=css, title="Youtube Downloader", js=js_func) as demo:
+with gr.Blocks(css=css, title="Canivete Holyrics V1.1.0", js=js_func) as demo:
     with gr.Tab("Download"):
         gr.Markdown("Download de Videos")
 
