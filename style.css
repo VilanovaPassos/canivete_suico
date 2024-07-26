@@ -1,0 +1,8 @@
+.url textarea {
+    background-color: red !important;
+    padding-left: 45px !important;
+    background: url("/file=VideoDownload.png") no-repeat left !important;
+    background-size: 40px !important;
+  }
+
+footer {visibility: hidden}

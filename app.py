@@ -13,17 +13,8 @@ TEMPORARIO = tempfile.gettempdir()
 #Pega indereço IP
 IP_ADDR = socket.gethostbyname(socket.gethostname())
 
-#CSS
-css = """
-.url textarea {
-  background-color: red !important;
-  padding-left: 55px !important;
-  background: url("https://cdn1.iconfinder.com/data/icons/logotypes/32/youtube-512.png") no-repeat left !important;
-  background-size: 50px !important;
-}
+#CSS https://cdn1.iconfinder.com/data/icons/logotypes/32/youtube-512.png
 
-footer {visibility: hidden}
-"""
 #javaScript força modo escuro
 js_func = """
 function refresh() {
@@ -130,7 +121,7 @@ def pdf_converter(file, como_salvar):
 
 # ************************** PAGINAS *******************************
 
-with gr.Blocks(css=css, title="Canivete Holyrics V1.1.0", js=js_func) as demo:
+with gr.Blocks(css="style.css", title="Canivete Holyrics V1.1.0", js=js_func) as demo:
     with gr.Tab("Download"):
 
         url_input = gr.Textbox(label="", placeholder="Cole a URL do video aqui", elem_classes="url")
@@ -168,4 +159,4 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.1.0", js=js_func) as demo:
 
 if __name__ == "__main__":
     os.system(f'start http://{IP_ADDR}') #abre navegador 
-    demo.launch(server_name=IP_ADDR, server_port=80, quiet=True, show_api=False, favicon_path="icon.ico")
+    demo.launch(server_name=IP_ADDR, server_port=80, quiet=True, show_api=False, favicon_path="icon.ico", allowed_paths=["."])
