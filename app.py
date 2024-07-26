@@ -78,22 +78,29 @@ def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progr
 # ************************* Conversor PDF ****************************
 
 def converte(pdf, path, file_name):
-    #  # Load a document
-    #  pdf = pdfium.PdfDocument(pdf)
-    #  pdf.get_metadata_dict 
+   #cria pasta para salvar o pdf com nome do arquivo
+    pasta = file_name
+  
+    # Parent Directory path 
+    parent_dir = path
+  
+    # Path 
+    path = os.path.join(parent_dir, pasta) 
+  
+    # Create the directory  
+    os.mkdir(path) 
 
-    #  # Loop over pages and render
-    #  for i in range(len(pdf)):
-    #      page = pdf[i]
-    #      image = page.render(scale=4).to_pil()
-    #      image.save(f"{path}\\{file_name}.jpg")
-
+    #converte pdf
     pdffile = pdf
+
     doc = fitz.open(pdffile)
-    page = doc.load_page(0)  # number of page
-    pix = page.get_pixmap()
-    output = f"{path}\\{file_name}.png"
-    pix.save(output)
+    
+    for i in range(doc.page_count):
+        page = doc.load_page(i)  # number of page
+        pix = page.get_pixmap()
+        output = f"{path}\\{file_name}{i}.png"
+        pix.save(output)
+
     doc.close()
 
             
