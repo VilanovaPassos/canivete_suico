@@ -38,7 +38,7 @@ def realiza_download_audio(video_link, save_path, nome="%(title)s"):
     os.system(f"yt-dlp -P \"{save_path}\" -x --audio-format mp3 -o \"{nome}.%(ext)s\" {video_link}")
     
 
-def video_downloader(video_link, tipo, resolution, como_salvar, progress=gr.Progress()):
+def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progress()):
     #verifica se url é valida
     progress.visible=True
     progress(0.1, desc="Iniciando...")
@@ -47,35 +47,31 @@ def video_downloader(video_link, tipo, resolution, como_salvar, progress=gr.Prog
         #Verifica tipo e encaminha para download de video ou audio 
         progress(0.3, desc="Procurando video...")
         if tipo != "somente audio":
-            #verifica se salvamento sera no holyrics
+
             progress(0.65, desc="Iniciando Download...")
+            progress(0.8, desc="Baixando...")
+
+            realiza_download_video(video_link, HOLYRICS_VIDEO, resolution)
+
+            progress(0.95, desc="Abrindo pasta...")
             if como_salvar == "sim":
-                progress(0.8, desc="Baixando...")
-                realiza_download_video(video_link, HOLYRICS_VIDEO, resolution)
+                os.system(f"explorer {HOLYRICS_VIDEO}")
 
-                gr.Warning("Video Baixado!")
-                return "DOWNLOAD REALIZADO COM SUCESSO!!! VIDEO SALVO NA PASTA DO HOLYRICS!!", gr.DownloadButton(label="salvar", value="base", visible=False)
-            else:
-                progress(0.8, desc="Baixando...")
-                realiza_download_video(video_link, TEMPORARIO, resolution, "temp")
-
-                gr.Warning("Video Baixado!")
-                return "DOWNLOAD REALIZADO COM SUCESSO!!! ESCOLHA UMA PASTA PARA SALVARO O ARQUIVO", gr.DownloadButton(label="salvar", value=f"{TEMPORARIO}\\temp.mp4", visible=True)
+            gr.Info("Video Baixado!")
+            return "DOWNLOAD REALIZADO COM SUCESSO!!! VIDEO SALVO NA PASTA DO HOLYRICS!!"
+            
         else:
             progress(0.65, desc="Iniciando Download...")
 
+            progress(0.8, desc="Baixando...")
+            realiza_download_audio(video_link, HOLYRICS_AUDIO)
+
+            progress(0.95, desc="Abrindo pasta...")
             if como_salvar == "sim":
-                progress(0.8, desc="Baixando...")
-                realiza_download_audio(video_link, HOLYRICS_AUDIO)
-
-                gr.Warning("Video Baixado!")
-                return "DOWNLOAD REALIZADO COM SUCESSO!!! VIDEO SALVO NA PASTA DO HOLYRICS!!", gr.DownloadButton(label="salvar", value="base", visible=False)
-            else:
-                progress(0.8, desc="Baixando...")
-                realiza_download_audio(video_link, TEMPORARIO, "temp")
-
-                gr.Warning("Video Baixado!")
-                return "DOWNLOAD REALIZADO COM SUCESSO!!! ESCOLHA UMA PASTA PARA SALVARO O ARQUIVO", gr.DownloadButton(label="salvar", value=f"{TEMPORARIO}\\temp.mp3", visible=True)
+               os.system(f"explorer {HOLYRICS_AUDIO}") 
+  
+            gr.Info("Video Baixado!")
+            return "DOWNLOAD REALIZADO COM SUCESSO!!! VIDEO SALVO NA PASTA DO HOLYRICS!!"
     else:
         gr.Error("URL INVALIDA!!!")
 
@@ -126,9 +122,9 @@ with gr.Blocks(css="style.css", title="Canivete Holyrics V1.1.0", js=js_func) as
 
         url_input = gr.Textbox(label="", placeholder="Cole a URL do video aqui", elem_classes="url")
 
-        tipo_input = gr.Radio(label="selecione a resolução", choices=["video", "somente audio"], value="video")
+        tipo_input = gr.Radio(label="Selecione o tipo de arquivo para baixar", choices=["video", "somente audio"], value="video")
 
-        como_salvar_input = gr.Radio(label="Salvar arquivo direto no holyrics?", choices=["sim", "não"], value="sim")
+        como_salvar_input = gr.Radio(label="Abrir pasta apos download?", choices=["sim", "não"], value="não")
 
         download_button = gr.Button("Baixar")
 
@@ -139,10 +135,7 @@ with gr.Blocks(css="style.css", title="Canivete Holyrics V1.1.0", js=js_func) as
         progress_output = gr.Textbox(label="")
 
 
-
-        salvar_output = gr.DownloadButton("Salvar Como", visible=False)
-
-        download_button.click(fn=video_downloader, inputs=[url_input, tipo_input, resolution_input, como_salvar_input], outputs=[progress_output, salvar_output])
+        download_button.click(fn=video_downloader, inputs=[url_input, tipo_input, resolution_input, como_salvar_input], outputs=[progress_output])
 
     with gr.Tab("Conversor PDF"):
         gr.Markdown("CONVERSOR PDF ---> JPEG")
