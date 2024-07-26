@@ -143,7 +143,7 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.1.0", js=js_func) as demo:
 
         with gr.Accordion(label="Outras Opções", open=False):
             gr.Markdown("ATENÇÃO!! A escolha de qualquer resolução aumentara muito o tempo de download!!")
-            resolution_input = gr.Radio(label="resolução", choices=["144", "360", "480", "720", "1080", "automatico"], value="720", )
+            resolution_input = gr.Radio(label="resolução", choices=["144", "360", "480", "720", "1080"], value="720", )
 
         progress_output = gr.Textbox(label="")
 
