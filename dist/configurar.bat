@@ -17,6 +17,9 @@ netsh advfirewall firewall add rule name="canivete_holyrics" protocol=TCP dir=ou
 @echo Criando tarefa no agendador de tarefas ...
 schtasks.exe /Create /ru SYSTEM /XML .\canivete_holyrics.xml /tn canivete
 
+@echo Colocando pasta no PATH
+setx PATH "%PATH%;C:\Holyrics\Holyrics\files" /m
+
 @echo executando tarefa pala primeira vez
 schtasks /run /tn canivete
 
