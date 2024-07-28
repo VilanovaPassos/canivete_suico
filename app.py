@@ -112,15 +112,16 @@ def pdf_converter(file, como_salvar):
     # file name without extension
     file_name = os.path.splitext(file_name)[0]
 
-    if como_salvar != "sim":
-        converte(file, TEMPORARIO, file_name)
+    if como_salvar == "sim":
+        converte(file, HOLYRICS_IMAGEM, file_name)
 
-        gr.Warning("Convertido com sucesso")
-        return gr.DownloadButton(label="salvar", value=f"{TEMPORARIO}\\{file_name}.png", visible=True)
+        gr.Info("Convertido com sucesso")
+        os.system(f"explorer {HOLYRICS_IMAGEM}")
+        
     else:
         converte(file, HOLYRICS_IMAGEM, file_name)
 
-        gr.Warning("Convertido com sucesso")
+        gr.Info("Convertido com sucesso")
 
 # ************************** PAGINAS *******************************
 
@@ -149,13 +150,11 @@ with gr.Blocks(css="style.css", title="Canivete Holyrics V1.1.0", js=js_func) as
 
         file_input = gr.File()
 
-        como_salvar_input = gr.Radio(label="Salvar arquivo direto no holyrics?", choices=["sim", "não"], value="sim")
-
-        salvar_output = gr.DownloadButton("Salvar Como", visible=False)
+        como_salvar_input = gr.Radio(label="Abrir pasta apos download?", choices=["sim", "não"], value="não")
 
         converte_btn = gr.Button("CONVERTER")
 
-        converte_btn.click(fn=pdf_converter, inputs=[file_input,como_salvar_input], outputs=salvar_output)
+        converte_btn.click(fn=pdf_converter, inputs=[file_input,como_salvar_input])
 
 if __name__ == "__main__":
     os.system(f'start http://{IP_ADDR}') #abre navegador 
