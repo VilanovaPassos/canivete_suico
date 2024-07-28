@@ -3,12 +3,19 @@ pause
 
 cd %~dp0
 
+@echo Criando diretorio na pasta do holyrics .....
+mkdir C:\Holyrics\Holyrics\files\dse-complementos\canivete
+
 @echo Copiando Canivete para dentro do Holyrics ...
-xcopy .\Canivete.exe C:\Holyrics\Holyrics\files
-xcopy .\ffmpeg.exe C:\Holyrics\Holyrics\files
-xcopy .\ffplay.exe C:\Holyrics\Holyrics\files
-xcopy .\ffprobe.exe C:\Holyrics\Holyrics\files
-xcopy .\yt-dlp.exe C:\Holyrics\Holyrics\files
+xcopy .\Canivete.exe C:\Holyrics\Holyrics\files\dse-complementos\canivete
+xcopy .\ffmpeg.exe C:\Holyrics\Holyrics\files\dse-complementos\canivete
+xcopy .\ffplay.exe C:\Holyrics\Holyrics\files\dse-complementos\canivete
+xcopy .\ffprobe.exe C:\Holyrics\Holyrics\files\dse-complementos\canivete
+xcopy .\yt-dlp.exe C:\Holyrics\Holyrics\files\dse-complementos\canivete
+xcopy .\icon.ico C:\Holyrics\Holyrics\files\dse-complementos\canivete
+xcopy .\PDF2JPG.png C:\Holyrics\Holyrics\files\dse-complementos\canivete
+xcopy .\style.css C:\Holyrics\Holyrics\files\dse-complementos\canivete
+xcopy .\VideoDonwload.png C:\Holyrics\Holyrics\files\dse-complementos\canivete
 
 @echo abrindo porta 80 ...
 netsh advfirewall firewall add rule name="canivete_holyrics" protocol=TCP dir=in localport=80 action=allow
@@ -18,7 +25,7 @@ netsh advfirewall firewall add rule name="canivete_holyrics" protocol=TCP dir=ou
 schtasks.exe /Create /ru SYSTEM /XML .\canivete_holyrics.xml /tn canivete
 
 @echo Colocando pasta no PATH
-setx PATH "%PATH%;C:\Holyrics\Holyrics\files" /m
+setx PATH "%PATH%;C:\Holyrics\Holyrics\files\dse-complementos\canivete" /m
 
 @echo executando tarefa pala primeira vez
 schtasks /run /tn canivete

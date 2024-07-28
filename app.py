@@ -35,7 +35,7 @@ def realiza_download_video(video_link, save_path, resolucao, nome="%(title)s"):
 
 def realiza_download_audio(video_link, save_path, nome="%(title)s"):
     #baixar como audio
-    os.system(f"yt-dlp -P \"{save_path}\" -x --audio-format mp3 -o \"{nome}.%(ext)s\" {video_link}")
+    os.system(f"yt-dlp -P \"{save_path}\" -x --audio-format mp3 --yes-playlist -o \"{nome}.%(ext)s\" {video_link}")
     
 
 def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progress()):
