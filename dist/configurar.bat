@@ -15,7 +15,7 @@ xcopy .\yt-dlp.exe C:\Holyrics\Holyrics\files\dse-complementos\canivete
 xcopy .\icon.ico C:\Holyrics\Holyrics\files\dse-complementos\canivete
 xcopy .\PDF2JPG.png C:\Holyrics\Holyrics\files\dse-complementos\canivete
 xcopy .\style.css C:\Holyrics\Holyrics\files\dse-complementos\canivete
-xcopy .\VideoDonwload.png C:\Holyrics\Holyrics\files\dse-complementos\canivete
+xcopy .\VideoDownload.png C:\Holyrics\Holyrics\files\dse-complementos\canivete
 
 @echo abrindo porta 80 ...
 netsh advfirewall firewall add rule name="canivete_holyrics" protocol=TCP dir=in localport=80 action=allow

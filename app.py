@@ -14,6 +14,16 @@ TEMPORARIO = tempfile.gettempdir()
 IP_ADDR = socket.gethostbyname(socket.gethostname())
 
 #CSS https://cdn1.iconfinder.com/data/icons/logotypes/32/youtube-512.png
+css = """
+.url textarea {
+    background-color: red !important;
+    padding-left: 45px !important;
+    background: url("/file=VideoDownload.png") no-repeat left !important;
+    background-size: 40px !important;
+  }
+
+footer {visibility: hidden}
+"""
 
 #javaScript força modo escuro
 js_func = """
@@ -148,7 +158,7 @@ def mp3_converter(file, como_salvar):
 
 # ************************** PAGINAS *******************************
 
-with gr.Blocks(css="style.css", title="Canivete Holyrics V1.2.0", js=js_func) as demo:
+with gr.Blocks(css=css, title="Canivete Holyrics V1.2.0", js=js_func) as demo:
     with gr.Tab("Download"):
 
         url_input = gr.Textbox(label="", placeholder="Cole a URL do video aqui", elem_classes="url")
