@@ -31,7 +31,7 @@ function refresh() {
 
 def realiza_download_video(video_link, save_path, resolucao, nome="%(title)s"):
     #baixar video
-    os.system(f"yt-dlp -P \"{save_path}\" -S \"res:{resolucao},vcodec:264,acodec:m4a\" -o \"{nome}.%(ext)s\" {video_link}") 
+    os.system(f"yt-dlp -P \"{save_path}\" -S \"res:{resolucao},vcodec:264,acodec:m4a\" --yes-playlist -o \"{nome}.%(ext)s\" {video_link}") 
 
 def realiza_download_audio(video_link, save_path, nome="%(title)s"):
     #baixar como audio
