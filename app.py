@@ -58,7 +58,7 @@ def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progr
                 os.system(f"explorer {HOLYRICS_VIDEO}")
 
             gr.Info("Video Baixado!")
-            return "DOWNLOAD REALIZADO COM SUCESSO!!! VIDEO SALVO NA PASTA DO HOLYRICS!!"
+            return "Download realizado com sucesso!!! VIDEO SALVO NA PASTA DO HOLYRICS!!"
             
         else:
             progress(0.65, desc="Iniciando Download...")
@@ -70,14 +70,14 @@ def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progr
             if como_salvar == "sim":
                os.system(f"explorer {HOLYRICS_AUDIO}") 
   
-            gr.Info("Video Baixado!")
-            return "DOWNLOAD REALIZADO COM SUCESSO!!! VIDEO SALVO NA PASTA DO HOLYRICS!!"
+            gr.Info("Audio Baixado!")
+            return "Download realizado com sucesso!!! AUDIO SALVO NA PASTA DO HOLYRICS!!"
     else:
         gr.Error("URL INVALIDA!!!")
 
 # ************************* Conversor PDF ****************************
 
-def converte(pdf, path, file_name):
+def converte_pdf(pdf, path, file_name):
    #cria pasta para salvar o pdf com nome do arquivo
     pasta = file_name
   
@@ -113,15 +113,38 @@ def pdf_converter(file, como_salvar):
     file_name = os.path.splitext(file_name)[0]
 
     if como_salvar == "sim":
-        converte(file, HOLYRICS_IMAGEM, file_name)
+        converte_pdf(file, HOLYRICS_IMAGEM, file_name)
 
         gr.Info("Convertido com sucesso")
         os.system(f"explorer {HOLYRICS_IMAGEM}")
         
     else:
-        converte(file, HOLYRICS_IMAGEM, file_name)
+        converte_pdf(file, HOLYRICS_IMAGEM, file_name)
 
         gr.Info("Convertido com sucesso")
+
+# ******************* CONVERSOR VIDEO PARA MP3 ********************
+def converte_mp3(file, path, file_name):
+    os.system(f"ffmpeg -i \"{file}\" \"{path}\\{file_name}.mp3\"")
+
+def mp3_converter(file, como_salvar):
+    # file name with extension
+    file_name = os.path.basename(file)
+
+    # file name without extension
+    file_name = os.path.splitext(file_name)[0]
+
+    if como_salvar == "sim":
+        converte_mp3(file, HOLYRICS_AUDIO, file_name)
+
+        gr.Info("Convertido com sucesso")
+        os.system(f"explorer {HOLYRICS_AUDIO}")
+        
+    else:
+        converte_mp3(file, HOLYRICS_AUDIO, file_name)
+
+        gr.Info("Convertido com sucesso")
+
 
 # ************************** PAGINAS *******************************
 
@@ -146,6 +169,7 @@ with gr.Blocks(css="style.css", title="Canivete Holyrics V1.2.0", js=js_func) as
         download_button.click(fn=video_downloader, inputs=[url_input, tipo_input, resolution_input, como_salvar_input], outputs=[progress_output])
 
     with gr.Tab("Conversor PDF"):
+        #gr.Markdown("<img style=\"float: left;\" src=\"file/PDF2JPG.png\" height=\"40\" width=\"40\">  CONVERSOR PDF ---> JPEG")
         gr.Markdown("CONVERSOR PDF ---> JPEG")
 
         file_input = gr.File()
@@ -155,6 +179,17 @@ with gr.Blocks(css="style.css", title="Canivete Holyrics V1.2.0", js=js_func) as
         converte_btn = gr.Button("CONVERTER")
 
         converte_btn.click(fn=pdf_converter, inputs=[file_input,como_salvar_input])
+
+    with gr.Tab("Conversor MP3"):
+        gr.Markdown("CONVERSOR VIDEO ---> MP3")
+
+        file_input = gr.File()
+
+        como_salvar_input = gr.Radio(label="Abrir pasta apos download?", choices=["sim", "não"], value="não")
+
+        converte_btn = gr.Button("CONVERTER")
+
+        converte_btn.click(fn=mp3_converter, inputs=[file_input,como_salvar_input])
 
 if __name__ == "__main__":
     os.system(f'start http://{IP_ADDR}') #abre navegador 
