@@ -1,20 +1,21 @@
 import gradio as gr
-import fitz
+import fitz #PDF
 import os
 import socket
-import tempfile
-import segno
+#import tempfile
+import segno #QRCODE
 
 
 #definicoes caminhos
 HOLYRICS_VIDEO = "C:\\Holyrics\\Holyrics\\files\\media\\video" 
 HOLYRICS_AUDIO = "C:\\Holyrics\\Holyrics\\files\\media\\audio"
 HOLYRICS_IMAGEM = "C:\\Holyrics\\Holyrics\\files\\media\\image"
-TEMPORARIO = tempfile.gettempdir()
+#TEMPORARIO = tempfile.gettempdir()
+
 #Pega indereço IP
 IP_ADDR = socket.gethostbyname(socket.gethostname())
 
-#CSS https://cdn1.iconfinder.com/data/icons/logotypes/32/youtube-512.png
+#css interno
 css = """
 .url textarea {
     background-color: red !important;
@@ -162,6 +163,7 @@ def mp3_converter(file, como_salvar):
 
         gr.Info("Convertido com sucesso")
 
+
 # *************************** QR CODE ******************************
 def qr_code():
     qrcode = segno.make_qr(f"http://{socket.gethostbyname(socket.gethostname())}")
@@ -172,6 +174,7 @@ def qr_code():
 def refresh():
     image = os.path.join(qr_code(), "ip_qr_code.png")
     return image
+
 
 # ************************** PAGINAS *******************************
 
@@ -219,7 +222,7 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.2.0", js=js_func) as demo:
         converte_btn.click(fn=mp3_converter, inputs=[file_input,como_salvar_input])
 
     with gr.Accordion("Acesse pelo celular usando QR CODE clicando AQUI.  OBS: precisa estar conectado no mesmo WI-FI", open=False):
-        image = gr.Image(show_label=False, width=500, height=500, elem_id="qrcode") #QR CODE
+        image = gr.Image(show_label=False, width=250, height=250, elem_id="qrcode") #QR CODE
         demo.load(fn=refresh, inputs=None, outputs=image, show_progress=False, every=10) 
 
 if __name__ == "__main__":
