@@ -3,6 +3,7 @@ import fitz
 import os
 import socket
 import tempfile
+import segno
 
 
 #definicoes caminhos
@@ -21,6 +22,12 @@ css = """
     background: url("/file=VideoDownload.png") no-repeat left !important;
     background-size: 40px !important;
   }
+
+#qrcode {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+}
 
 footer {visibility: hidden}
 """
@@ -155,6 +162,16 @@ def mp3_converter(file, como_salvar):
 
         gr.Info("Convertido com sucesso")
 
+# *************************** QR CODE ******************************
+def qr_code():
+    qrcode = segno.make_qr(f"http://{socket.gethostbyname(socket.gethostname())}")
+    qrcode.save("ip_qr_code.png", scale=10)
+
+    return "."
+
+def refresh():
+    image = os.path.join(qr_code(), "ip_qr_code.png")
+    return image
 
 # ************************** PAGINAS *******************************
 
@@ -200,6 +217,10 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.2.0", js=js_func) as demo:
         converte_btn = gr.Button("CONVERTER")
 
         converte_btn.click(fn=mp3_converter, inputs=[file_input,como_salvar_input])
+
+    with gr.Accordion("Acesse pelo celular usando QR CODE clicando AQUI.  OBS: precisa estar conectado no mesmo WI-FI", open=False):
+        image = gr.Image(show_label=False, width=500, height=500, elem_id="qrcode") #QR CODE
+        demo.load(fn=refresh, inputs=None, outputs=image, show_progress=False, every=10) 
 
 if __name__ == "__main__":
     os.system(f'start http://{IP_ADDR}') #abre navegador 
