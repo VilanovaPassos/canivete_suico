@@ -8,4 +8,5 @@
 *.so
 *.zip
 *.log
+*.ifp
 ip_qr_code.png
