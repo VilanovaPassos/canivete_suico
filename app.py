@@ -4,6 +4,7 @@ import os
 import socket
 #import tempfile
 import segno #QRCODE
+import sys
 
 
 #definicoes caminhos
@@ -49,11 +50,11 @@ function refresh() {
 
 def realiza_download_video(video_link, save_path, resolucao, nome="%(title)s"):
     #baixar video
-    os.system(f"yt-dlp -P \"{save_path}\" -S \"res:{resolucao},vcodec:264,acodec:m4a\" --yes-playlist -o \"{nome}.%(ext)s\" {video_link}") 
+    os.system(f"yt-dlp -P \"{save_path}\" -S \"res:{resolucao},vcodec:264,acodec:m4a\" --yes-playlist -o \"{nome}.%(ext)s\" {video_link} >> output.log") 
 
 def realiza_download_audio(video_link, save_path, nome="%(title)s"):
     #baixar como audio
-    os.system(f"yt-dlp -P \"{save_path}\" -x --audio-format mp3 --yes-playlist -o \"{nome}.%(ext)s\" {video_link}")
+    os.system(f"yt-dlp -P \"{save_path}\" -x --audio-format mp3 --yes-playlist -o \"{nome}.%(ext)s\" {video_link} >> output.log")
     
 
 def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progress()):
@@ -175,6 +176,11 @@ def refresh():
     image = os.path.join(qr_code(), "ip_qr_code.png")
     return image
 
+# *************************** LOG *********************************
+def read_logs():
+    sys.stdout.flush()
+    with open("output.log", "r") as f:
+        return f.read()
 
 # ************************** PAGINAS *******************************
 
@@ -224,6 +230,10 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.2.0", js=js_func) as demo:
     with gr.Accordion("Acesse pelo celular usando QR CODE clicando AQUI.  OBS: precisa estar conectado no mesmo WI-FI", open=False):
         image = gr.Image(show_label=False, width=250, height=250, elem_id="qrcode") #QR CODE
         demo.load(fn=refresh, inputs=None, outputs=image, show_progress=False, every=10) 
+
+    with gr.Accordion("LOGS", open=False):
+        logs = gr.Textbox("LOGS:")
+        demo.load(read_logs, None, logs, every=1) 
 
 if __name__ == "__main__":
     os.system(f'start http://{IP_ADDR}') #abre navegador 
