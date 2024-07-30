@@ -74,7 +74,7 @@ def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progr
 
             progress(0.95, desc="Abrindo pasta...")
             if como_salvar == "sim":
-                os.system(f"explorer {HOLYRICS_VIDEO}")
+                os.system(f"start {HOLYRICS_VIDEO}")
 
             gr.Info("Video Baixado!")
             return "Download realizado com sucesso!!! VIDEO SALVO NA PASTA DO HOLYRICS!!"
@@ -87,7 +87,7 @@ def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progr
 
             progress(0.95, desc="Abrindo pasta...")
             if como_salvar == "sim":
-               os.system(f"explorer {HOLYRICS_AUDIO}") 
+               os.system(f"start {HOLYRICS_AUDIO}") 
   
             gr.Info("Audio Baixado!")
             return "Download realizado com sucesso!!! AUDIO SALVO NA PASTA DO HOLYRICS!!"
@@ -135,7 +135,7 @@ def pdf_converter(file, como_salvar):
         converte_pdf(file, HOLYRICS_IMAGEM, file_name)
 
         gr.Info("Convertido com sucesso")
-        os.system(f"explorer {HOLYRICS_IMAGEM}")
+        os.system(f"start {HOLYRICS_IMAGEM}")
         
     else:
         converte_pdf(file, HOLYRICS_IMAGEM, file_name)
@@ -157,7 +157,7 @@ def mp3_converter(file, como_salvar):
         converte_mp3(file, HOLYRICS_AUDIO, file_name)
 
         gr.Info("Convertido com sucesso")
-        os.system(f"explorer {HOLYRICS_AUDIO}")
+        os.system(f"start {HOLYRICS_AUDIO}")
         
     else:
         converte_mp3(file, HOLYRICS_AUDIO, file_name)
