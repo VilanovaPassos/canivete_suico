@@ -184,7 +184,7 @@ def read_logs():
 
 # ************************** PAGINAS *******************************
 
-with gr.Blocks(css=css, title="Canivete Holyrics V1.2.0", js=js_func) as demo:
+with gr.Blocks(css=css, title="Canivete Holyrics V1.4.0", js=js_func) as demo:
     with gr.Tab("Download"):
 
         url_input = gr.Textbox(label="", placeholder="Cole a URL do video aqui", elem_classes="url")
