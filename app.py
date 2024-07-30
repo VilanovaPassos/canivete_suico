@@ -179,7 +179,7 @@ def refresh():
 # *************************** LOG *********************************
 def read_logs():
     sys.stdout.flush()
-    with open("output.log", "r") as f:
+    with open(os.path.join(".", "output.log"), "r") as f:
         return f.read()
 
 # ************************** PAGINAS *******************************
