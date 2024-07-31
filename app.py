@@ -75,7 +75,7 @@ def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progr
 
             progress(0.95, desc="Abrindo pasta...")
             if como_salvar == "sim":
-                p = subprocess.run(f'explorer {HOLYRICS_VIDEO}', shell=True)
+                os.system("abre_video.bat") #abre pasta de video
 
             gr.Info("Video Baixado!")
             return "Download realizado com sucesso!!! VIDEO SALVO NA PASTA DO HOLYRICS!!"
@@ -88,7 +88,7 @@ def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progr
 
             progress(0.95, desc="Abrindo pasta...")
             if como_salvar == "sim":
-               p = subprocess.run(f'explorer {HOLYRICS_AUDIO}', shell=True) 
+               os.system("abre_audio.bat") #abre pasta de audio 
   
             gr.Info("Audio Baixado!")
             return "Download realizado com sucesso!!! AUDIO SALVO NA PASTA DO HOLYRICS!!"
@@ -136,7 +136,7 @@ def pdf_converter(file, como_salvar):
         converte_pdf(file, HOLYRICS_IMAGEM, file_name)
 
         gr.Info("Convertido com sucesso")
-        p = subprocess.run(f'explorer {HOLYRICS_IMAGEM}', shell=True)
+        os.system("abre_imagem.bat") #abre pasta de imagens
         
     else:
         converte_pdf(file, HOLYRICS_IMAGEM, file_name)
@@ -158,7 +158,7 @@ def mp3_converter(file, como_salvar):
         converte_mp3(file, HOLYRICS_AUDIO, file_name)
 
         gr.Info("Convertido com sucesso")
-        p = subprocess.run(f'explorer {HOLYRICS_AUDIO}', shell=True)
+        os.system("abre_audio.bat") #abre pasta de audio
         
     else:
         converte_mp3(file, HOLYRICS_AUDIO, file_name)
@@ -185,7 +185,7 @@ def read_logs():
 
 # ************************** PAGINAS *******************************
 
-with gr.Blocks(css=css, title="Canivete Holyrics V1.4.0", js=js_func) as demo:
+with gr.Blocks(css=css, title="Canivete Holyrics V1.4.1", js=js_func) as demo:
     with gr.Tab("Download"):
 
         url_input = gr.Textbox(label="", placeholder="Cole a URL do video aqui", elem_classes="url")
@@ -237,6 +237,8 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.4.0", js=js_func) as demo:
         demo.load(read_logs, None, logs, every=1) 
 
 if __name__ == "__main__":
-    p = subprocess.run(f'explorer http://{IP_ADDR}', shell=True) #abre navegador 
-    os.system("echo \"%date% -- %time% servidor iniciado\" >> output.log")
+    os.system("Abre.bat") #abre navegador 
+
+    os.system("echo \"%date% -- %time% servidor iniciado\" >> output.log") #inicia log com timestamp
+
     demo.launch(server_name="0.0.0.0", server_port=80, quiet=True, show_api=False, favicon_path="icon.ico", allowed_paths=["."])
