@@ -1,1 +1,0 @@
-start C:\Holyrics\Holyrics\files\media\image

@@ -75,7 +75,7 @@ def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progr
 
             progress(0.95, desc="Abrindo pasta...")
             if como_salvar == "sim":
-                os.system("abre_video.bat") #abre pasta de video
+                os.system("schtasks /Run /TN abre_video") #abre pasta de video
 
             gr.Info("Video Baixado!")
             return "Download realizado com sucesso!!! VIDEO SALVO NA PASTA DO HOLYRICS!!"
@@ -88,7 +88,7 @@ def video_downloader(video_link, tipo, resolution, como_salvar,progress=gr.Progr
 
             progress(0.95, desc="Abrindo pasta...")
             if como_salvar == "sim":
-               os.system("abre_audio.bat") #abre pasta de audio 
+               os.system("schtasks /Run /TN abre_audio") #abre pasta de audio 
   
             gr.Info("Audio Baixado!")
             return "Download realizado com sucesso!!! AUDIO SALVO NA PASTA DO HOLYRICS!!"
@@ -136,8 +136,7 @@ def pdf_converter(file, como_salvar):
         converte_pdf(file, HOLYRICS_IMAGEM, file_name)
 
         gr.Info("Convertido com sucesso")
-        os.system("abre_imagem.bat") #abre pasta de imagens
-        
+        os.system("schtasks /Run /TN abre_imagem") #abre pasta de imagens    
     else:
         converte_pdf(file, HOLYRICS_IMAGEM, file_name)
 
@@ -158,8 +157,7 @@ def mp3_converter(file, como_salvar):
         converte_mp3(file, HOLYRICS_AUDIO, file_name)
 
         gr.Info("Convertido com sucesso")
-        os.system("abre_audio.bat") #abre pasta de audio
-        
+        os.system("schtasks /Run /TN abre_audio") #abre pasta de audio
     else:
         converte_mp3(file, HOLYRICS_AUDIO, file_name)
 
@@ -237,7 +235,7 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.4.1", js=js_func) as demo:
         demo.load(read_logs, None, logs, every=1) 
 
 if __name__ == "__main__":
-    os.system("Abre.bat") #abre navegador 
+    os.system("schtasks /Run /TN abre_navegador") #abre navegador 
 
     os.system("echo \"%date% -- %time% servidor iniciado\" >> output.log") #inicia log com timestamp
 
