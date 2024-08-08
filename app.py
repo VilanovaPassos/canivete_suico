@@ -117,6 +117,7 @@ def converte_pdf(pdf, path, file_name):
     
     for i in range(doc.page_count):
         page = doc.load_page(i)  # number of page
+        os.system("echo convertendo pagina {i} >> output.log") #log
         pix = page.get_pixmap()
         output = f"{path}\\{file_name}{i}.png"
         pix.save(output)
@@ -132,6 +133,8 @@ def pdf_converter(file, como_salvar):
     # file name without extension
     file_name = os.path.splitext(file_name)[0]
 
+    os.system("echo iniciando conversao PDF!! >> output.log") #log
+
     if como_salvar == "sim":
         converte_pdf(file, HOLYRICS_IMAGEM, file_name)
 
@@ -142,9 +145,11 @@ def pdf_converter(file, como_salvar):
 
         gr.Info("Convertido com sucesso")
 
+    os.system("echo PDF convertido!! >> output.log") #log
+
 # ******************* CONVERSOR VIDEO PARA MP3 ********************
 def converte_mp3(file, path, file_name):
-    os.system(f"ffmpeg -i \"{file}\" \"{path}\\{file_name}.mp3\"")
+    os.system(f"ffmpeg -i \"{file}\" \"{path}\\{file_name}.mp3\" 2> output.log")
 
 def mp3_converter(file, como_salvar):
     # file name with extension
@@ -209,7 +214,7 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.4.1", js=js_func) as demo:
 
         file_input = gr.File()
 
-        como_salvar_input = gr.Radio(label="Abrir pasta apos download?", choices=["sim", "não"], value="não")
+        como_salvar_input = gr.Radio(label="Abrir pasta apos conversão?", choices=["sim", "não"], value="não")
 
         converte_btn = gr.Button("CONVERTER")
 
@@ -220,7 +225,7 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.4.1", js=js_func) as demo:
 
         file_input = gr.File()
 
-        como_salvar_input = gr.Radio(label="Abrir pasta apos download?", choices=["sim", "não"], value="não")
+        como_salvar_input = gr.Radio(label="Abrir pasta apos conversão?", choices=["sim", "não"], value="não")
 
         converte_btn = gr.Button("CONVERTER")
 
@@ -231,12 +236,12 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.4.1", js=js_func) as demo:
         demo.load(fn=refresh, inputs=None, outputs=image, show_progress=False, every=10) 
 
     with gr.Accordion("LOGS", open=False):
-        logs = gr.Textbox("LOGS:")
+        logs = gr.Textbox(autoscroll=True)
         demo.load(read_logs, None, logs, every=1) 
 
 if __name__ == "__main__":
     os.system("schtasks /Run /TN abre_navegador") #abre navegador 
 
-    os.system("echo \"%date% -- %time% servidor iniciado\" >> output.log") #inicia log com timestamp
+    os.system("echo %date% -- %time% servidor iniciado >> output.log") #inicia log com timestamp
 
     demo.launch(server_name="0.0.0.0", server_port=80, quiet=True, show_api=False, favicon_path="icon.ico", allowed_paths=["."])
