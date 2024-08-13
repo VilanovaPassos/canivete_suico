@@ -6,6 +6,7 @@ import socket
 #import tempfile
 import segno #QRCODE
 import sys
+import shutil
 
 
 #definicoes caminhos
@@ -186,6 +187,32 @@ def read_logs():
     with open(os.path.join(".", "output.log"), "r") as f:
         return f.read()
 
+# ************************ ENVIAR ARQUIVOS *************************
+def enviar_arquivo(file):
+     # pega nome do arquivo com extencao
+    file_name = os.path.basename(file)
+
+    # pega extencao arquivo
+    extension = os.path.splitext(file_name)[1]
+    print(extension)
+
+    if(extension == ".mp3"):
+        #envia para pasta de audios
+        shutil.move(file, HOLYRICS_AUDIO)
+        gr.Info("enviado para Audios!!")
+        os.system(f"echo {file_name} enviado para Audios!! >> output.log")
+    elif(extension == ".mp4"):
+        shutil.move(file, HOLYRICS_VIDEO)
+        gr.Info("enviado para Videos!!")
+        os.system(f"echo {file_name} enviado para Videos!! >> output.log")
+    elif(extension == ".png" or extension == ".jpeg" or extension == ".jpg"):
+        shutil.move(file, HOLYRICS_IMAGEM)
+        gr.Info("enviado para Imagens!!")
+        os.system(f"echo {file_name} enviado para Imagens!! >> output.log")
+    else:
+        gr.Info("Arquivo NÂO Suportado!!!")
+        os.system(f"echo Erro ao enviar arquivo {file_name} >> output.log")
+
 # ************************** PAGINAS *******************************
 
 with gr.Blocks(css=css, title="Canivete Holyrics V1.4.1", js=js_func) as demo:
@@ -230,6 +257,15 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.4.1", js=js_func) as demo:
         converte_btn = gr.Button("CONVERTER")
 
         converte_btn.click(fn=mp3_converter, inputs=[file_input,como_salvar_input])
+    
+    with gr.Tab("Enviar arquivo"):
+        gr.Markdown("CONVERSOR VIDEO ---> MP3")
+
+        file_input = gr.File()
+
+        envia_btn = gr.Button("Enviar")
+
+        envia_btn.click(fn=enviar_arquivo, inputs=[file_input])
 
     with gr.Accordion("Acesse pelo celular usando QR CODE clicando AQUI.  OBS: precisa estar conectado no mesmo WI-FI", open=False):
         image = gr.Image(show_label=False, width=250, height=250, elem_id="qrcode") #QR CODE
