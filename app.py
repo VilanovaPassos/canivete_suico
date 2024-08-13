@@ -118,7 +118,7 @@ def converte_pdf(pdf, path, file_name):
     
     for i in range(doc.page_count):
         page = doc.load_page(i)  # number of page
-        os.system("echo convertendo pagina {i} >> output.log") #log
+        os.system(f"echo convertendo pagina {i} >> output.log") #log
         pix = page.get_pixmap()
         output = f"{path}\\{file_name}{i}.png"
         pix.save(output)
