@@ -1,7 +1,7 @@
 import gradio as gr
 import fitz #PDF
 import os
-import subprocess
+#import subprocess
 import socket
 #import tempfile
 import segno #QRCODE
@@ -194,7 +194,6 @@ def enviar_arquivo(file):
 
     # pega extencao arquivo
     extension = os.path.splitext(file_name)[1]
-    print(extension)
 
     if(extension == ".mp3"):
         #envia para pasta de audios
@@ -215,7 +214,7 @@ def enviar_arquivo(file):
 
 # ************************** PAGINAS *******************************
 
-with gr.Blocks(css=css, title="Canivete Holyrics V1.5.0", js=js_func) as demo:
+with gr.Blocks(css=css, title="Canivete Holyrics V1.5.1", js=js_func) as demo:
     with gr.Tab("Download"):
 
         url_input = gr.Textbox(label="", placeholder="Cole a URL do video aqui", elem_classes="url")
@@ -259,7 +258,7 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.5.0", js=js_func) as demo:
         converte_btn.click(fn=mp3_converter, inputs=[file_input,como_salvar_input])
     
     with gr.Tab("Enviar arquivo"):
-        gr.Markdown("CONVERSOR VIDEO ---> MP3")
+        gr.Markdown("Envie arquivos para o Holyrics")
 
         file_input = gr.File()
 
