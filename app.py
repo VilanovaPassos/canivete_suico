@@ -169,6 +169,89 @@ def mp3_converter(file, como_salvar):
 
         gr.Info("Convertido com sucesso")
 
+# *************************** GERAR FUNDO ******************************
+def gerador(video, audio, path, file_name, inicio="", fim="", imagem="false"):
+    if imagem:
+        os.system(f"ffmpeg -i \"{video}\" -i \"{audio}\" -map 0:v -map 1:a -c:v copy -c:a copy {inicio}{fim}\"{path}\\{file_name}.mp4\" 2> output.log")
+    else:
+        os.system(f"ffmpeg -i \"{video}\" -stream_loop -1 -i \"{audio}\" -map 0:v -map 1:a -c:v copy -c:a copy -shortest {inicio}{fim}\"{path}\\{file_name}.mp4\" 2> output.log")
+
+def gerar_fundo(video, audio, como_salvar, trim, inicio, fim):
+    # file name with extension
+    file_name = os.path.basename(video)
+
+    tipo = os.path.splitext(file_name)[1]
+
+    # file name without extension
+    file_name = os.path.splitext(file_name)[0]
+
+    ss, to = "", ""
+    if trim == "sim":
+        print("entrou") #debug
+        ss = f" -ss {inicio} "
+        to = f" -to {fim} "
+
+    if(tipo == ".png" or tipo == ".jpeg" or tipo == ".jpg"):
+        gerador(video, audio, HOLYRICS_VIDEO, file_name, ss, to, True)
+    else:
+        gerador(video, audio, HOLYRICS_VIDEO, file_name, ss, to, False)
+
+
+    if como_salvar == "sim":
+        gr.Info("Convertido com sucesso")
+        os.system("schtasks /Run /TN abre_video") #abre pasta de video
+    else:
+        gerador(video, audio, HOLYRICS_VIDEO, file_name, ss, to)
+
+        gr.Info("Convertido com sucesso")
+
+# *************************** EDITOR VIDEO ******************************
+def trim_video(inicio="00:00:00", fim="99"):
+    comando = f"-ss {inicio} -to {fim} "
+
+    return comando
+
+def altera_volume(volume=100):
+    volume = volume/100
+
+    comando = f"-af \"volume={volume}\" "
+
+    return comando
+
+def adiciona_fade():
+    comando = "-vf \"fade=t=in:st=0:d=3\" "
+
+    return comando
+def converte_h265():
+    comando = "-c:v libx265 "
+
+    return comando
+
+def nome_saida(arquivo):
+    file_name = os.path.basename(arquivo)
+
+    return file_name
+
+def editar(video, salvar, trim, inicio, fim, vol, volume, fade, h265 ):
+    comando = f"ffmpeg -y -i \"{video}\" "
+
+    if trim == "sim":
+        comando += trim_video(inicio, fim)
+    if vol == "sim":
+        comando += altera_volume(int(volume))
+    if fade == "sim":
+        comando += adiciona_fade()
+    if h265 == "sim":
+        comando += converte_h265()
+
+    comando += f"\"{HOLYRICS_VIDEO}\\{nome_saida(video)}\""
+
+    os.system(f"{comando} 2> output.log")
+
+    if salvar == "sim":
+         os.system("schtasks /Run /TN abre_video") #abre pasta de audio
+    
+    gr.Info("Editado com sucesso !!")
 
 # *************************** QR CODE ******************************
 def qr_code():
@@ -214,7 +297,7 @@ def enviar_arquivo(file):
 
 # ************************** PAGINAS *******************************
 
-with gr.Blocks(css=css, title="Canivete Holyrics V1.5.1", js=js_func) as demo:
+with gr.Blocks(css=css, title="Canivete Holyrics V1.6.0", js=js_func) as demo:
     with gr.Tab("Download"):
 
         url_input = gr.Textbox(label="", placeholder="Cole a URL do video aqui", elem_classes="url")
@@ -266,12 +349,60 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.5.1", js=js_func) as demo:
 
         envia_btn.click(fn=enviar_arquivo, inputs=[file_input])
 
+    with gr.Tab("Gerar fundo"):
+        gr.Markdown("Gerador de fundos, adicione um video e um audio")
+
+        gr.Markdown("Video:")
+        video_input = gr.File()
+
+        gr.Markdown("Audio:")
+        audio_input = gr.File()
+
+        como_salvar_input = gr.Radio(label="Abrir pasta apos conversão?", choices=["sim", "não"], value="não")
+        
+        with gr.Accordion("cortar video", open=False):
+            trim = gr.Radio(label="Cortar o video?", choices=["sim", "não"], value="não")
+
+            inicio = gr.Textbox(label="Tempo inicial do corte em HH:MM:SS", placeholder="tempo inicial em HH:MM:SS", value="00:00:00")
+
+            fim = gr.Textbox(label="Tempo final do corte em HH:MM:SS", placeholder="tempo final em HH:MM:SS")
+
+        gerar_btn = gr.Button("GERAR")
+
+        gerar_btn.click(fn=gerar_fundo, inputs=[video_input, audio_input, como_salvar_input, trim, inicio, fim])
+
+    with gr.Tab("Ediçao de video"):
+        gr.Markdown("Edição de video ")
+
+        gr.Markdown("Video")
+        video_input = gr.File()
+
+        como_salvar_input = gr.Radio(label="Abrir pasta apos conversão?", choices=["sim", "não"], value="não")
+
+        trim = gr.Radio(label="Cortar o video?", choices=["sim", "não"], value="não")
+
+        inicio = gr.Textbox(label="Tempo inicial do corte em HH:MM:SS", placeholder="Tempo inicial em HH:MM:SS", value="00:00:00")
+
+        fim = gr.Textbox(label="Tempo final do corte em HH:MM:SS", placeholder="Tempo final em HH:MM:SS")
+
+        vol = gr.Radio(label="Alterar volume?", choices=["sim", "não"], value="não")
+
+        volume = gr.Textbox(label="Digite valor do volume menor que 100 para diminuir e maior para aumentar", value=100)
+
+        fade = gr.Radio(label="Adicionar fade?", choices=["sim", "não"], value="não")
+
+        h265 = gr.Radio(label="Transformar em h265?", choices=["sim", "não"], value="não")
+
+        editar_btn = gr.Button("EDITAR")
+
+        editar_btn.click(fn=editar, inputs=[video_input, como_salvar_input, trim, inicio, fim, vol, volume, fade, h265])
+
     with gr.Accordion("Acesse pelo celular usando QR CODE clicando AQUI.  OBS: precisa estar conectado no mesmo WI-FI", open=False):
         image = gr.Image(show_label=False, width=250, height=250, elem_id="qrcode") #QR CODE
         demo.load(fn=refresh, inputs=None, outputs=image, show_progress=False, every=10) 
 
     with gr.Accordion("LOGS", open=False):
-        logs = gr.Textbox(autoscroll=True)
+        logs = gr.Textbox(autoscroll=True, show_label=False, lines= 15)
         demo.load(read_logs, None, logs, every=1) 
 
 if __name__ == "__main__":
