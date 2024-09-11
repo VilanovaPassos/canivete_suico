@@ -1,15 +1,16 @@
+# *********************** BIBLIOTECAS *****************************
 import gradio as gr
 import fitz #PDF
-import os
+import os #executar comandos no sistema
 #import subprocess
-import socket
+import socket # pegar IP maquina
 #import tempfile
 import segno #QRCODE
 import sys
-import shutil
+import shutil #mover arquivo
 
 
-#definicoes caminhos
+# definicoes caminhos
 HOLYRICS_VIDEO = "C:\\Holyrics\\Holyrics\\files\\media\\video" 
 HOLYRICS_AUDIO = "C:\\Holyrics\\Holyrics\\files\\media\\audio"
 HOLYRICS_IMAGEM = "C:\\Holyrics\\Holyrics\\files\\media\\image"
@@ -114,7 +115,7 @@ def converte_pdf(pdf, path, file_name):
     #converte pdf
     pdffile = pdf
 
-    doc = fitz.open(pdffile)
+    doc = fitz.open(pdffile) #abre arquivo
     
     for i in range(doc.page_count):
         page = doc.load_page(i)  # number of page
@@ -123,15 +124,15 @@ def converte_pdf(pdf, path, file_name):
         output = f"{path}\\{file_name}{i}.png"
         pix.save(output)
 
-    doc.close()
+    doc.close() #fecha arquivo
 
             
 
 def pdf_converter(file, como_salvar):
-    # file name with extension
+    # recebe nome do arquivo com extensao
     file_name = os.path.basename(file)
 
-    # file name without extension
+    # recebe nome doarquivo sem extensao
     file_name = os.path.splitext(file_name)[0]
 
     os.system("echo iniciando conversao PDF!! >> output.log") #log
@@ -150,7 +151,7 @@ def pdf_converter(file, como_salvar):
 
 # ******************* CONVERSOR VIDEO PARA MP3 ********************
 def converte_mp3(file, path, file_name):
-    os.system(f"ffmpeg -i \"{file}\" \"{path}\\{file_name}.mp3\" 2> output.log")
+    os.system(f"ffmpeg -i \"{file}\" \"{path}\\{file_name}.mp3\" 2> output.log") #comando para extrair audio
 
 def mp3_converter(file, como_salvar):
     # file name with extension
@@ -172,25 +173,27 @@ def mp3_converter(file, como_salvar):
 # *************************** GERAR FUNDO ******************************
 def gerador(video, audio, path, file_name, inicio="", fim="", imagem="false"):
     if imagem:
+        # comando para imagem
         os.system(f"ffmpeg -i \"{video}\" -i \"{audio}\" -map 0:v -map 1:a -c:v copy -c:a copy {inicio}{fim}\"{path}\\{file_name}.mp4\" 2> output.log")
     else:
+        #comando paa video
         os.system(f"ffmpeg -i \"{video}\" -stream_loop -1 -i \"{audio}\" -map 0:v -map 1:a -c:v copy -c:a copy -shortest {inicio}{fim}\"{path}\\{file_name}.mp4\" 2> output.log")
 
 def gerar_fundo(video, audio, como_salvar, trim, inicio, fim):
     # file name with extension
     file_name = os.path.basename(video)
 
-    tipo = os.path.splitext(file_name)[1]
+    tipo = os.path.splitext(file_name)[1] #pega extensao arquivo
 
     # file name without extension
     file_name = os.path.splitext(file_name)[0]
 
     ss, to = "", ""
     if trim == "sim":
-        print("entrou") #debug
         ss = f" -ss {inicio} "
         to = f" -to {fim} "
 
+    #verifica se arquivo é imagem ou video
     if(tipo == ".png" or tipo == ".jpeg" or tipo == ".jpg"):
         gerador(video, audio, HOLYRICS_VIDEO, file_name, ss, to, True)
     else:
@@ -207,11 +210,13 @@ def gerar_fundo(video, audio, como_salvar, trim, inicio, fim):
 
 # *************************** EDITOR VIDEO ******************************
 def trim_video(inicio="00:00:00", fim="99"):
+    #adiciona comando para trim
     comando = f"-ss {inicio} -to {fim} "
 
     return comando
 
 def altera_volume(volume=100):
+    # adiciona comando para nalterar volume
     volume = volume/100
 
     comando = f"-af \"volume={volume}\" "
@@ -219,22 +224,27 @@ def altera_volume(volume=100):
     return comando
 
 def adiciona_fade():
+    #Adiciona comando para fade
     comando = "-vf \"fade=t=in:st=0:d=3\" "
 
     return comando
+
 def converte_h265():
+    #adiciona comando para converter para h265
     comando = "-c:v libx265 "
 
     return comando
 
 def nome_saida(arquivo):
+    #cria nome de saida
     file_name = os.path.basename(arquivo)
 
     return file_name
 
 def editar(video, salvar, trim, inicio, fim, vol, volume, fade, h265 ):
-    comando = f"ffmpeg -y -i \"{video}\" "
+    comando = f"ffmpeg -y -i \"{video}\" " #comando base
 
+    #verifica quais opcoes foram selecionadas para adicionar comando correspondente
     if trim == "sim":
         comando += trim_video(inicio, fim)
     if vol == "sim":
@@ -244,9 +254,9 @@ def editar(video, salvar, trim, inicio, fim, vol, volume, fade, h265 ):
     if h265 == "sim":
         comando += converte_h265()
 
-    comando += f"\"{HOLYRICS_VIDEO}\\{nome_saida(video)}\""
+    comando += f"\"{HOLYRICS_VIDEO}\\{nome_saida(video)}\"" #adiciona caminho para salvar e nome do arquivo no comando
 
-    os.system(f"{comando} 2> output.log")
+    os.system(f"{comando} 2> output.log") #executa comando 
 
     if salvar == "sim":
          os.system("schtasks /Run /TN abre_video") #abre pasta de audio
@@ -255,20 +265,20 @@ def editar(video, salvar, trim, inicio, fim, vol, volume, fade, h265 ):
 
 # *************************** QR CODE ******************************
 def qr_code():
-    qrcode = segno.make_qr(f"http://{socket.gethostbyname(socket.gethostname())}")
-    qrcode.save("ip_qr_code.png", scale=10)
+    qrcode = segno.make_qr(f"http://{socket.gethostbyname(socket.gethostname())}") #cria qr code com IP da maquina
+    qrcode.save("ip_qr_code.png", scale=10) # salva qr code
 
-    return "."
+    return "." #retorna diretorio atual 
 
 def refresh():
-    image = os.path.join(qr_code(), "ip_qr_code.png")
-    return image
+    image = os.path.join(qr_code(), "ip_qr_code.png") #cria qr code novo com base no IP da maquina
+    return image #retorna caminho qr code
 
 # *************************** LOG *********************************
 def read_logs():
-    sys.stdout.flush()
-    with open(os.path.join(".", "output.log"), "r") as f:
-        return f.read()
+    sys.stdout.flush() #limpa cache
+    with open(os.path.join(".", "output.log"), "r") as f: #abre arquivo output.log no diretorio atual
+        return f.read() #retorna a linha que foi lida
 
 # ************************ ENVIAR ARQUIVOS *************************
 def enviar_arquivo(file):
@@ -280,9 +290,9 @@ def enviar_arquivo(file):
 
     if(extension == ".mp3"):
         #envia para pasta de audios
-        shutil.move(file, HOLYRICS_AUDIO)
+        shutil.move(file, HOLYRICS_AUDIO) #comando para mover arquivo
         gr.Info("enviado para Audios!!")
-        os.system(f"echo {file_name} enviado para Audios!! >> output.log")
+        os.system(f"echo {file_name} enviado para Audios!! >> output.log") #log
     elif(extension == ".mp4"):
         shutil.move(file, HOLYRICS_VIDEO)
         gr.Info("enviado para Videos!!")
@@ -399,15 +409,15 @@ with gr.Blocks(css=css, title="Canivete Holyrics V1.6.0", js=js_func) as demo:
 
     with gr.Accordion("Acesse pelo celular usando QR CODE clicando AQUI.  OBS: precisa estar conectado no mesmo WI-FI", open=False):
         image = gr.Image(show_label=False, width=250, height=250, elem_id="qrcode") #QR CODE
-        demo.load(fn=refresh, inputs=None, outputs=image, show_progress=False, every=10) 
+        demo.load(fn=refresh, inputs=None, outputs=image, show_progress=False, every=10) #faz refresh qr code a cada 10 segundos
 
     with gr.Accordion("LOGS", open=False):
         logs = gr.Textbox(autoscroll=True, show_label=False, lines= 15)
-        demo.load(read_logs, None, logs, every=1) 
+        demo.load(read_logs, None, logs, every=1) #le arquivo de log a cada 1 segundo
 
-if __name__ == "__main__":
+if __name__ == "__main__": #inicio programa
     os.system("schtasks /Run /TN abre_navegador") #abre navegador 
 
     os.system("echo %date% -- %time% servidor iniciado >> output.log") #inicia log com timestamp
 
-    demo.launch(server_name="0.0.0.0", server_port=80, quiet=True, show_api=False, favicon_path="icon.ico", allowed_paths=["."])
+    demo.launch(server_name="0.0.0.0", server_port=80, quiet=True, show_api=False, favicon_path="icon.ico", allowed_paths=["."]) #inicia servidor
